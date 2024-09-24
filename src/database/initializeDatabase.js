@@ -13,7 +13,7 @@ export async function initializeDatabase(database) {
       updated_at DATE
     );
 
-    INSERT OR REPLACE INTO users (nome, email, senha, role) VALUES ('Super', 'admin@email.com', 'A123456a!', 'SUPER');
+    INSERT OR REPLACE INTO users (nome, email, senha, role) VALUES ('Super', 'super@email.com', 'A123456a!', 'SUPER');
     INSERT OR REPLACE INTO users (nome, email, senha, role) VALUES ('Admin', 'admin@email.com', 'A123456a!', 'ADMIN');
     INSERT OR REPLACE INTO users (nome, email, senha, role) VALUES ('User', 'user@email.com', 'A123456a!', 'USER');
   `);

@@ -31,20 +31,21 @@ export function AuthProvider({ children }) {
             });
             throw new Error("Usuário ou senha inválidos");
         }
-       
+
 
         setUser({
             autenticated: true,
             user: response,
             role: response.role,
         });
-
-        
-
     }
 
     const signOut = async () => {
-        setUser({});
+        setUser({
+            autenticated: false,
+            user: null,
+            role: null,
+        });
     };
 
     useEffect(() => {
