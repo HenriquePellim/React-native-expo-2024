@@ -17,11 +17,10 @@ const StackLayout = () => {
             router.back();
             if (router.canGoBack()) router.back();
          } else {
-            router.replace("index");
+            router.replace("/");
          }
       } else {
          router.push("(protected)");
-
       }
    }, [user]);
 
@@ -29,6 +28,7 @@ const StackLayout = () => {
       <Stack>
          <Stack.Screen name="index" options={{ headerShown: false }} />
          <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+         <Stack.Screen name="about" options={{ headerShown: false }} />
       </Stack>
    );
 }

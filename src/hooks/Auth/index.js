@@ -44,10 +44,10 @@ export function AuthProvider({ children }) {
         loadStorageData();
     }, []);
 
- 
+
     const signIn = async ({ email, password }) => {
         const response = await authUser({ email, password });
-       
+
 
         if (!response) {
             setUser({
@@ -69,21 +69,21 @@ export function AuthProvider({ children }) {
 
     const signOut = async () => {
         await AsyncStorage.removeItem("@payment:user");
-        setUser({});
+        setUser({
+            autenticated: false,
+            user: null,
+            role: null,
+        });
     };
-
-    
 
     if (user?.autenticated === null) {
         return (
-        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text style={{ fontSize: 28, marginTop: 15 }}>
-                Carregando Dados do Usuário
-                </Text>
-            <ActivityIndicator size="large" color="#0000ff"/>
-        </View>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ fontSize: 28, marginTop: 15 }}>Carregando Dados do Usuário</Text>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
         );
-      }
+    }
 
     return (
         <AuthContext.Provider value={{ user, signIn, signOut }}>
