@@ -11,10 +11,21 @@ function CustomDrawerContent(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ marginTop: 20 }}>
-        <Image source={{
-          uri: 'https://reactnative.dev/img/tiny_logo.png',
-        }}/>
+      <View
+        style={{
+          marginTop: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor:'#f0f0f0',
+          paddingVertical: 10,
+        }}
+      >
+        <Image
+          source={{
+            uri: 'https://www.github.com/zanfolin.png',
+          }}
+          style={{ width: 100, height: 100, borderRadius: 50, margin: 10 }}
+        />
         <Text style={{ textAlign: 'center', fontSize: 16, fontFamily: 'regular' }}>
           {user.user?.nome}
         </Text>
