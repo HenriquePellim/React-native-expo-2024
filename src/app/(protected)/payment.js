@@ -9,109 +9,109 @@ export default function Payment() {
     const [valor, setValor] = useState("0,00");
     const [sugestoes, setSugestoes] = useState([{
         "id": 1,
-        "nome": "Dionisio O'Shevlin"
+        "nome": "Jeep Wrangler"
     }, {
         "id": 2,
-        "nome": "Curran Gobbet"
+        "nome": "Toyota Land Cruiser"
     }, {
         "id": 3,
-        "nome": "Elberta Simonin"
+        "nome": "Ford Bronco"
     }, {
         "id": 4,
-        "nome": "Adham Feek"
+        "nome": "Land Rover Defender"
     }, {
         "id": 5,
-        "nome": "Filmer Gravy"
+        "nome": "Mercedes-Benz G-Class"
     }, {
         "id": 6,
-        "nome": "Putnam Swatridge"
+        "nome": "Chevrolet Colorado ZR2"
     }, {
         "id": 7,
-        "nome": "Mariann Georgi"
+        "nome": "Nissan Patrol"
     }, {
         "id": 8,
-        "nome": "Cynthy Margrett"
+        "nome": "Suzuki Jimny"
     }, {
         "id": 9,
-        "nome": "Amalie China"
+        "nome": "Ford F-150 Raptor"
     }, {
         "id": 10,
-        "nome": "Aube Tacon"
+        "nome": "Ram 1500 TRX"
     }, {
         "id": 11,
-        "nome": "Carmela Elcott"
+        "nome": "Toyota 4Runner"
     }, {
         "id": 12,
-        "nome": "Brandice Burgoine"
+        "nome": "Mitsubishi Pajero"
     }, {
         "id": 13,
-        "nome": "Willow Rosenbaum"
+        "nome": "Jeep Gladiator"
     }, {
         "id": 14,
-        "nome": "Graig Puleque"
+        "nome": "Chevrolet Silverado ZR2"
     }, {
         "id": 15,
-        "nome": "Skylar Iddenden"
+        "nome": "Toyota Tacoma TRD Pro"
     }, {
         "id": 16,
-        "nome": "Aline Slixby"
+        "nome": "Ford Ranger Raptor"
     }, {
         "id": 17,
-        "nome": "Loleta Ordemann"
+        "nome": "GMC Sierra AT4"
     }, {
         "id": 18,
-        "nome": "Nils Giacopetti"
+        "nome": "Isuzu D-Max"
     }, {
         "id": 19,
-        "nome": "Kara Yardley"
+        "nome": "Mahindra Thar"
     }, {
         "id": 20,
-        "nome": "Deeanne But"
+        "nome": "Hummer EV"
     }, {
         "id": 21,
-        "nome": "Georgie Haselup"
+        "nome": "Lexus GX"
     }, {
         "id": 22,
-        "nome": "Gwenneth Gathercoal"
+        "nome": "Volkswagen Amarok"
     }, {
         "id": 23,
-        "nome": "Israel Rudd"
+        "nome": "Honda Ridgeline"
     }, {
         "id": 24,
-        "nome": "Sanson Pimme"
+        "nome": "BMW X5"
     }, {
         "id": 25,
-        "nome": "Maxie Newbigging"
+        "nome": "Jeep Grand Cherokee"
     }, {
         "id": 26,
-        "nome": "Sabine Yearnsley"
+        "nome": "Toyota Sequoia"
     }, {
         "id": 27,
-        "nome": "Lock Pithie"
+        "nome": "Subaru Outback"
     }, {
         "id": 28,
-        "nome": "Nobe Brothers"
+        "nome": "Audi Q7"
     }, {
         "id": 29,
-        "nome": "Sherilyn Derry"
+        "nome": "Hyundai Palisade"
     }, {
         "id": 30,
-        "nome": "Eyde Klimowski"
+        "nome": "Volvo XC90"
     }, {
         "id": 31,
-        "nome": "Amelina Gilbard"
+        "nome": "Kia Telluride"
     }, {
         "id": 32,
-        "nome": "Donny Glidden"
+        "nome": "Genesis GV80"
     }, {
         "id": 33,
-        "nome": "Bernetta Braisted"
+        "nome": "Jaguar F-Pace"
     }, {
         "id": 34,
-        "nome": "Giustino Abbes"
+        "nome": "Porsche Cayenne"
     }, {
         "id": 35,
-        "nome": "Pattie Paulat"
+        "nome": "Range Rover Sport"
     }]);
     const [id, setId] = useState(1);
     const [data, setData] = useState(new Date());
