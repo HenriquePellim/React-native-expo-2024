@@ -5,15 +5,20 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { z } from "zod";
-
-//user_id INTEGER NOT NULL,
-//user_cadastro INTEGER NOT NULL,
-//valor_pago REAL NOT NULL,
-//data_pagamento DATE NOT NULL,
-//observacao TEXT,
+import { useAuth } from "../../hooks/Auth/index"
 
 const convertValue = (value) => {
-    
+    try {
+        let valorLimpo = value.replace(",", "").replace(".", "");
+        let valorConvertido = Number(valorLimpo) / 100;
+        if (valorConvertido === 0 || isNaN(valorConvertido)) {
+            return 0
+        }
+        return valorConvertido
+    } catch (error) {
+        return valorConvertido
+    }
+
 }
 
 const paymentSchema = z.object({
@@ -21,7 +26,7 @@ const paymentSchema = z.object({
     user_id: z.number().int().positive(),
     user_cadastro: z.number().int().positive(),
     data_pagamento: z.date(),
-    observacao: z.string()
+    observacao: z.string(),
 })
 
 export default function Payment() {
@@ -137,6 +142,7 @@ export default function Payment() {
     const [viewCalendar, setViewCalendar] = useState(false)
     const [observacao, setObservacao] = useState("");
     const valueRef = useRef();
+    const { user } = useAuth();
 
     const handleCalendar = (event, selectedDate) => {
         setViewCalendar(false);
@@ -167,23 +173,19 @@ export default function Payment() {
 
     };
 
-    //user_id INTEGER NOT NULL,
-    // user_cadastro INTEGER NOT NULL,
-    //  valor_pago REAL NOT NULL,
-    // data_pagamento DATE NOT NULL,
-    //observacao TEXT,
 
     const handleSubmit = async () => {
         const payment = {
             user_id: id,
-            user_cadastro: 1,
-            valor_pago: valor,
+            user_cadastro: Number(user.user.id),
+            valor_pago: convertValue(valor),
             data_pagamento: data,
             observacao,
         };
 
         try {
             const result = await paymentSchema.parseAsync(payment)
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
