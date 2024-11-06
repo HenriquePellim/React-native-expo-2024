@@ -16,6 +16,34 @@ export function useUsersDatabase() {
         }
     }
 
+    async function create({
+        user_id,
+        user_cadastro,
+        valor_pago,
+        data_pagamento,
+        observacao,
+    }) {
+        const statment = await database.prepareAsync(`
+            INSERT INTO payments (user_id, user_cadastro, valor_pago, data_pagamento, observacao) 
+            VALUE ($user_id, $user_cadastro, $valor_pago, $data_pagamento, $observacao);
+            
+            `);
+            const insertedID = result.lastInsertRowId.toString();
+        try {
+            const result = await statment.executeAsync({
+                $user_id: user_id,
+                $user_cadastro: user_cadastro,
+                $valor_pago: valor_pago,
+                $data_pagamento: data_pagamento,
+                $observacao: observacao
+            });
+        } catch (error) {
+
+        } finally {
+
+        }
+    }
+
     return {
         authUser,
     };
