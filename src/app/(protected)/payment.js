@@ -5,7 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { z } from "zod";
-import { useAuth } from "../../hooks/Auth/index"
+import { useAuth } from "../../hooks/Auth/index";
+import { useUsersDatabase } from "../../database/useUsersDatabase";
 
 const convertValue = (value) => {
     try {
@@ -143,6 +144,7 @@ export default function Payment() {
     const [observacao, setObservacao] = useState("");
     const valueRef = useRef();
     const { user } = useAuth();
+    const { createUser } = useUsersDatabase();
 
     const handleCalendar = (event, selectedDate) => {
         setViewCalendar(false);
@@ -184,8 +186,10 @@ export default function Payment() {
         };
 
         try {
-            const result = await paymentSchema.parseAsync(payment)
+            const result = await paymentSchema.parseAsync(payment);
+            const { insertedID } = await createUser(payment);
             console.log(result);
+            console.log(insertedID);
         } catch (error) {
             console.log(error);
         }
