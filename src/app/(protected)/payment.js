@@ -178,15 +178,16 @@ export default function Payment() {
 
     const handleSubmit = async () => {
         const payment = {
-            user_id: id,
+            user_id: Number(id), 
             user_cadastro: Number(user.user.id),
             valor_pago: convertValue(valor),
             data_pagamento: data,
             observacao,
         };
-
+    
         try {
             const result = await paymentSchema.parseAsync(payment);
+            payment.data_pagamento = payment.data_pagamento.toISOString().replace("T", " ").split(".")[0];
             const { insertedID } = await createUser(payment);
             console.log(result);
             console.log(insertedID);
@@ -194,6 +195,7 @@ export default function Payment() {
             console.log(error);
         }
     };
+    
 
     return (
         <KeyboardAvoidingView
