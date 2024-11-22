@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { z } from "zod";
 import { useAuth } from "../../hooks/Auth/index";
+import { usePaymentsDatabase } from "../../database/usePaymentsDatabase";
 import { useUsersDatabase } from "../../database/useUsersDatabase";
 
 const convertValue = (value) => {
@@ -32,119 +33,15 @@ const paymentSchema = z.object({
 
 export default function Payment() {
     const [valor, setValor] = useState("0,00");
-    const [sugestoes, setSugestoes] = useState([{
-        "id": 1,
-        "nome": "Jeep Wrangler"
-    }, {
-        "id": 2,
-        "nome": "Toyota Land Cruiser"
-    }, {
-        "id": 3,
-        "nome": "Ford Bronco"
-    }, {
-        "id": 4,
-        "nome": "Land Rover Defender"
-    }, {
-        "id": 5,
-        "nome": "Mercedes-Benz G-Class"
-    }, {
-        "id": 6,
-        "nome": "Chevrolet Colorado ZR2"
-    }, {
-        "id": 7,
-        "nome": "Nissan Patrol"
-    }, {
-        "id": 8,
-        "nome": "Suzuki Jimny"
-    }, {
-        "id": 9,
-        "nome": "Ford F-150 Raptor"
-    }, {
-        "id": 10,
-        "nome": "Ram 1500 TRX"
-    }, {
-        "id": 11,
-        "nome": "Toyota 4Runner"
-    }, {
-        "id": 12,
-        "nome": "Mitsubishi Pajero"
-    }, {
-        "id": 13,
-        "nome": "Jeep Gladiator"
-    }, {
-        "id": 14,
-        "nome": "Chevrolet Silverado ZR2"
-    }, {
-        "id": 15,
-        "nome": "Toyota Tacoma TRD Pro"
-    }, {
-        "id": 16,
-        "nome": "Ford Ranger Raptor"
-    }, {
-        "id": 17,
-        "nome": "GMC Sierra AT4"
-    }, {
-        "id": 18,
-        "nome": "Isuzu D-Max"
-    }, {
-        "id": 19,
-        "nome": "Mahindra Thar"
-    }, {
-        "id": 20,
-        "nome": "Hummer EV"
-    }, {
-        "id": 21,
-        "nome": "Lexus GX"
-    }, {
-        "id": 22,
-        "nome": "Volkswagen Amarok"
-    }, {
-        "id": 23,
-        "nome": "Honda Ridgeline"
-    }, {
-        "id": 24,
-        "nome": "BMW X5"
-    }, {
-        "id": 25,
-        "nome": "Jeep Grand Cherokee"
-    }, {
-        "id": 26,
-        "nome": "Toyota Sequoia"
-    }, {
-        "id": 27,
-        "nome": "Subaru Outback"
-    }, {
-        "id": 28,
-        "nome": "Audi Q7"
-    }, {
-        "id": 29,
-        "nome": "Hyundai Palisade"
-    }, {
-        "id": 30,
-        "nome": "Volvo XC90"
-    }, {
-        "id": 31,
-        "nome": "Kia Telluride"
-    }, {
-        "id": 32,
-        "nome": "Genesis GV80"
-    }, {
-        "id": 33,
-        "nome": "Jaguar F-Pace"
-    }, {
-        "id": 34,
-        "nome": "Porsche Cayenne"
-    }, {
-        "id": 35,
-        "nome": "Range Rover Sport"
-    }]);
+    const [sugestoes, setSugestoes] = useState([]);
     const [id, setId] = useState(1);
     const [data, setData] = useState(new Date());
     const [viewCalendar, setViewCalendar] = useState(false)
     const [observacao, setObservacao] = useState("");
     const valueRef = useRef();
     const { user } = useAuth();
-    const { createUser } = useUsersDatabase();
+    const { createPayment } = usePaymentsDatabase();
+    const { getAllUsers } = useUsersDatabase();
 
     const handleCalendar = (event, selectedDate) => {
         setViewCalendar(false);
@@ -152,7 +49,18 @@ export default function Payment() {
     };
 
     useEffect(() => {
-        valueRef?.current?.focus();
+        (async () => {
+            valueRef?.current?.focus();
+            try {
+                const users = await getAllUsers();
+                setSugestoes(users);
+                setId(users[0].id)
+            } catch (error) {
+                console.log(error);
+            }
+        })();
+
+
     }, []);
 
     const handleChangeValor = (value) => {
@@ -178,24 +86,28 @@ export default function Payment() {
 
     const handleSubmit = async () => {
         const payment = {
-            user_id: Number(id), 
+            user_id: Number(id),
             user_cadastro: Number(user.user.id),
             valor_pago: convertValue(valor),
             data_pagamento: data,
             observacao,
         };
-    
+
         try {
             const result = await paymentSchema.parseAsync(payment);
             payment.data_pagamento = payment.data_pagamento.toISOString().replace("T", " ").split(".")[0];
-            const { insertedID } = await createUser(payment);
-            console.log(result);
+            const { insertedID } = await createPayment(payment);
             console.log(insertedID);
+            setValor("0,00");
+            setId(sugestoes[0].id);
+            setData(new Date());
+            setObservacao("");
+            valueRef?.current?.focus();
         } catch (error) {
             console.log(error);
         }
     };
-    
+
 
     return (
         <KeyboardAvoidingView
