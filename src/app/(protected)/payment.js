@@ -27,8 +27,10 @@ const paymentSchema = z.object({
     valor_pago: z.number().gt(0),
     user_id: z.number().int().positive(),
     user_cadastro: z.number().int().positive(),
-    data_pagamento: z.date(),
-    observacao: z.string(),
+    data_pagamento: z.string().datetime(),
+    numero_recibo: z.string(),
+    observacao: z.string().optional(),
+	
 })
 
 export default function Payment() {
@@ -42,6 +44,7 @@ export default function Payment() {
     const { user } = useAuth();
     const { createPayment } = usePaymentsDatabase();
     const { getAllUsers } = useUsersDatabase();
+	const [numeroRecibo, setNumeroRecibo] = useState("");
 
     const handleCalendar = (event, selectedDate) => {
         setViewCalendar(false);
@@ -86,16 +89,17 @@ export default function Payment() {
 
     const handleSubmit = async () => {
         const payment = {
-            user_id: Number(id),
+            user_id: id,
             user_cadastro: Number(user.user.id),
             valor_pago: convertValue(valor),
-            data_pagamento: data,
+            data_pagamento: data.toISOString(),
+            numero_recibo: numeroRecibo,
             observacao,
         };
 
         try {
             const result = await paymentSchema.parseAsync(payment);
-            payment.data_pagamento = payment.data_pagamento.toISOString().replace("T", " ").split(".")[0];
+            payment.data_pagamento = new Date(payment.data_pagamento).toISOString().replace("T", " ").split(".")[0];
             const { insertedID } = await createPayment(payment);
             console.log(insertedID);
             setValor("0,00");
@@ -126,6 +130,16 @@ export default function Payment() {
                         onChangeText={(newValue) => handleChangeValor(newValue)}
                         ref={valueRef}
                     />
+                </View>
+                <View style={styles.inputView}>
+                    <Ionicons name="wallet-outline" size={24} color="black" />
+                    <TextInput
+                        placeholder="Valor"
+                        keyboardType="decimal-pad"
+                        style={styles.inputValor}
+                        value={numeroRecibo}
+                        onChangeText={setNumeroRecibo}
+                  />
                 </View>
                 <View style={styles.inputView}>
                     <Picker
@@ -210,6 +224,6 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
         fontSize: 16,
         flex: 1,
-        lineHeight: 20,
-    },
+        lineHeight: 20,
+    },
 })
