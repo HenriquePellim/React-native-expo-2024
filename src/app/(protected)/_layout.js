@@ -77,7 +77,7 @@ const DrawerLayout = () => {
           options={{
             drawerLabel: "Pagamentos", headerTitle: "Pagamentos",
             drawerIcon: () => (
-              <Ionicons name='diamond-outline' size={20} color="black" />
+              <Ionicons name="wallet-outline" size={20} color="black" />
             ),
           }}
         />

@@ -7,11 +7,9 @@ import { useEffect } from "react";
 const StackLayout = () => {
 
    const { user } = useAuth();
-   const segments = useSegments();
+  
 
    useEffect(() => {
-      const inAuthGroup = segments[0] === "(protected)";
-
       if (user?.autenticated == false) {
          if (router.canGoBack()) {
             router.back();
