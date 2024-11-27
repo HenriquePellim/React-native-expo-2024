@@ -57,15 +57,17 @@ export default function Payment() {
             try {
                 const users = await getAllUsers();
                 setSugestoes(users);
-                setId(users[0].id)
+                if (users && users.length > 0) {
+                    setId(users[0].id); // Garante que o primeiro elemento existe
+                } else {
+                    console.warn("Nenhum usuário encontrado.");
+                }
             } catch (error) {
-                console.log(error);
+                console.error("Erro ao buscar usuários:", error);
             }
         })();
-
-
     }, []);
-
+    
     const handleChangeValor = (value) => {
         try {
             let valorLimpo = value.replace(",", "").replace(".", "");
@@ -90,12 +92,13 @@ export default function Payment() {
     const handleSubmit = async () => {
         const payment = {
             user_id: id,
-            user_cadastro: Number(user.user.id),
+            user_cadastro: user && user.user && user.user.id ? Number(user.user.id) : null,
             valor_pago: convertValue(valor),
             data_pagamento: data.toISOString(),
             numero_recibo: numeroRecibo,
             observacao,
         };
+        
 
         try {
             const result = await paymentSchema.parseAsync(payment);

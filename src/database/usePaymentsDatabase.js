@@ -1,15 +1,15 @@
-import {useSQLiteContext} from "expo-sqlite"
+import { useSQLiteContext } from "expo-sqlite"
 
 export function usePaymentsDatabase() {
     const database = useSQLiteContext()
-    
+
     async function createPayment({
         user_id,
         user_cadastro,
         valor_pago,
         data_pagamento,
         observacao,
-        numero_recibo
+        numero_recibo,
     }) {
         const statment = await database.prepareAsync(`
             INSERT INTO payments (user_id, user_cadastro, valor_pago, data_pagamento, observacao, numero_recibo) 
@@ -34,5 +34,16 @@ export function usePaymentsDatabase() {
             await statment.finalizeAsync();
         }
     }
-     return {createPayment};
+
+    async function getPayments() {
+        try {
+            const payments = await database.getAllAsync("SELECT p.*, u.nome FROM payments p, users u WHERE u.id = p.user_id");
+            return payments;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    return { createPayment, getPayments };
 }
