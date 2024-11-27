@@ -90,23 +90,29 @@ export default function Payment() {
 
 
     const handleSubmit = async () => {
+        if (!numeroRecibo) {
+            console.log("Número do recibo é obrigatório!");
+            return; // Retorna sem fazer a inserção se o campo estiver vazio
+        }
+    
         const payment = {
             user_id: id,
-            user_cadastro: user && user.user && user.user.id ? Number(user.user.id) : null,
+            user_cadastro: user && user.user && user.user.id ? Number(user.user.id) : 1,
             valor_pago: convertValue(valor),
             data_pagamento: data.toISOString(),
             numero_recibo: numeroRecibo,
             observacao,
         };
-        
-
+    
+        console.log(payment);
+    
         try {
             const result = await paymentSchema.parseAsync(payment);
             payment.data_pagamento = new Date(payment.data_pagamento).toISOString().replace("T", " ").split(".")[0];
             const { insertedID } = await createPayment(payment);
             console.log(insertedID);
             setValor("0,00");
-            setId(sugestoes[0].id);
+            setId(sugestoes[0]?.id || 1);
             setData(new Date());
             setObservacao("");
             valueRef?.current?.focus();
@@ -114,6 +120,8 @@ export default function Payment() {
             console.log(error);
         }
     };
+    
+    
 
 
     return (

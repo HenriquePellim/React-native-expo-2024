@@ -2,30 +2,40 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { usePaymentsDatabase } from "../../database/usePaymentsDatabase";
 import { FlashList } from "@shopify/flash-list";
+import { formatDateToBrazilian } from "../../utils/formatData";
 
 export default function List() {
     const [data, setData] = useState([]);
     const { getPayments } = usePaymentsDatabase();
+    const [page, setPage] = useState(0)
+    const [loading, setLoading] = useState(true)
+    const [hasMore, setHasMore] = useState(true)
 
     async function fetchData() {
-        const payments = await getPayments();
-        setData(payments || []); // Garante que 'data' será um array mesmo se 'payments' for undefined/null.
+        if (hasMore = false) return;
+        setPage(page + 1)
+        const payments = await getPayments(page);
+
+        if (payments.length < 5) setHasMore(false)
+        setData([...data, ...payments])
+        setLoading(false)
     }
 
     useEffect(() => {
+        setPage(0)
         fetchData();
     }, []);
 
     renderItem = ({ item }) => (
-        <View style={{ flexDirection: "row", margin: 5 }}>
-            <View style={{ flex: 1 }}>
-                <Text>{item.nome}</Text>
-                <View style={{ flexDirection: "row", justifyContent:"space-around" }}>
-                    <Text>{item.data_pagamento}</Text>
+        <View style={{ flexDirection: "row", margin: 5, marginBottom: 10, padding: 3, backgroundColor: "#fff", height: 150 }}>
+            <View style={{ flex: 1, gap: 5 }}>
+                <Text style={{ fontFamily: "bold", fontSize: 18, textTransform: "uppercase" }}>{item.nome}</Text>
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                    <Text style={{ fontFamily: "regular" }}>{formatDateToBrazilian(item.data_pagamento || new Date())}</Text>
                     <Text>{item.numero_recibo}</Text>
                 </View>
             </View>
-
+            <View> <Text style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>{formatCurrencyBRL(item.valor_pago || 0)}</Text></View>
         </View>
     );
 
@@ -35,7 +45,10 @@ export default function List() {
             <FlashList
                 data={data}
                 renderItem={renderItem}
-                estimatedItemSize={200}
+                estimatedItemSize={50}
+                onEndReached={fetchData}
+                onEndReachedThreshold={0.8}
+                keyExtractor={(item) => item.id.toString}
             />
         </View>
     );
